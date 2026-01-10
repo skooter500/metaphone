@@ -24,6 +24,10 @@ signal stop
 @export var out_color:Color
 @export var in_color:Color
 
+@export var midi_channel = 1
+@export var root = 1
+
+
 func _ready():
 	# load_samples()
 	initialise_sequence(notes, steps)
@@ -121,7 +125,7 @@ var midi_notes = []
 # Example usage for your sequencer:
 func setup_note_grid():
 	# Start at C3 (MIDI 48) with a minor pentatonic scale	
-	midi_notes = get_scale_notes(48, Scale.PENTATONIC_MINOR)
+	midi_notes = get_scale_notes(root, Scale.PENTATONIC_MINOR)
 	
 	# Or for Irish trad feel, start at D4 with Irish hexatonic
 	# var midi_notes = get_scale_notes(62, Scale.IRISH)  # D4
@@ -178,12 +182,16 @@ func print_sequence():
 		
 func play_sample(e, i):
 	
+	# Potential race condition!!!!
+	# Great example
+	
+	var note = midi_notes[i]
 	# print("play sample:" + str(i))
 	var m = InputEventMIDI.new()
 	m.message = MIDI_MESSAGE_NOTE_ON
-	m.pitch = midi_notes[i]
+	m.pitch = note
 	m.velocity = 100
-	m.channel = 1
+	m.channel = midi_channel
 	
 	
 	$"../MidiPlayer".receive_raw_midi_message(m)
@@ -192,15 +200,17 @@ func play_sample(e, i):
 	
 	m = InputEventMIDI.new()
 	m.message = MIDI_MESSAGE_NOTE_OFF
-	m.pitch = midi_notes[i]
+	m.pitch = note
 	m.velocity = 0
-	m.channel = 1
+	m.channel = midi_channel
 	$"../MidiPlayer".receive_raw_midi_message(m)
 	
 	
-func toggle(e, row, col):
-	print("toggle " + str(row) + " " + str(col))
-	sequence[row][col] = ! sequence[row][col]
+func toggle(area, row, col):
+	print("Strike " + str(row) + " " + str(col))
+	var hand = area.get_parent()
+	if hand.gesture == "Index Pinch":
+		sequence[row][col] = ! sequence[row][col]
 	play_sample(0, row)
 	
 
@@ -297,5 +307,14 @@ func _on_up_semi_area_entered(area: Area3D) -> void:
 
 func _on_down_semi_area_entered(area: Area3D) -> void:
 	root_note -= 1
+	midi_notes = get_scale_notes(root_note, mucical_scale)
+	pass # Replace with function body.
+
+
+func _on_scale_down_area_entered(area: Area3D) -> void:
+	mucical_scale = mucical_scale - 1
+	if mucical_scale < 0:
+		mucical_scale = Scale.size() -1
+	print("Scale: " + str(mucical_scale))
 	midi_notes = get_scale_notes(root_note, mucical_scale)
 	pass # Replace with function body.

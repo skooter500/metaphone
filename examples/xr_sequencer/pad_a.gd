@@ -18,5 +18,10 @@ func _process(delta: float) -> void:
 
 		
 func _on_area_entered(area: Area3D) -> void:
+	
+	var hand = area.get_parent()
+	
+		
+	
 	toggle = ! toggle
 	pass # Replace with function body.
