@@ -1,0 +1,301 @@
+extends Marker3D
+
+var samples:Array
+var players:Array
+
+@export var font:Font 
+
+var sequence = []
+var file_names = []
+
+@export var path_str = "" 
+@export var pad_scene:PackedScene
+
+@export var steps:int = 8
+@export var notes:int = 16
+
+var rows:int
+var cols:int
+
+signal start
+signal step
+signal stop
+
+@export var out_color:Color
+@export var in_color:Color
+
+func _ready():
+	# load_samples()
+	initialise_sequence(notes, steps)
+	make_sequencer()
+	midi_notes = get_scale_notes(root_note, mucical_scale)
+
+
+enum Scale {
+	MAJOR,
+	MINOR,
+	HARMONIC_MINOR,
+	MELODIC_MINOR,
+	DORIAN,
+	PHRYGIAN,
+	LYDIAN,
+	MIXOLYDIAN,
+	LOCRIAN,
+	PENTATONIC_MAJOR,
+	PENTATONIC_MINOR,
+	BLUES,
+	BLUES_MAJOR,
+	BEBOP_DOMINANT,
+	BEBOP_MAJOR,
+	WHOLE_TONE,
+	CHROMATIC,
+	JAPANESE,  # Hirajoshi
+	EGYPTIAN,
+	HUNGARIAN_MINOR,
+	IRISH,  # Hexatonic - common in trad
+}
+
+var mucical_scale:Scale = Scale.MAJOR
+
+# Define scale intervals (semitones from root)
+var scale_intervals = {
+	Scale.MAJOR: [0, 2, 4, 5, 7, 9, 11],
+	Scale.MINOR: [0, 2, 3, 5, 7, 8, 10],  # Natural minor
+	Scale.HARMONIC_MINOR: [0, 2, 3, 5, 7, 8, 11],
+	Scale.MELODIC_MINOR: [0, 2, 3, 5, 7, 9, 11],
+	Scale.DORIAN: [0, 2, 3, 5, 7, 9, 10],
+	Scale.PHRYGIAN: [0, 1, 3, 5, 7, 8, 10],
+	Scale.LYDIAN: [0, 2, 4, 6, 7, 9, 11],
+	Scale.MIXOLYDIAN: [0, 2, 4, 5, 7, 9, 10],
+	Scale.LOCRIAN: [0, 1, 3, 5, 6, 8, 10],
+	Scale.PENTATONIC_MAJOR: [0, 2, 4, 7, 9],
+	Scale.PENTATONIC_MINOR: [0, 3, 5, 7, 10],
+	Scale.BLUES: [0, 3, 5, 6, 7, 10],
+	Scale.BLUES_MAJOR: [0, 2, 3, 4, 7, 9],
+	Scale.BEBOP_DOMINANT: [0, 2, 4, 5, 7, 9, 10, 11],
+	Scale.BEBOP_MAJOR: [0, 2, 4, 5, 7, 8, 9, 11],
+	Scale.WHOLE_TONE: [0, 2, 4, 6, 8, 10],
+	Scale.CHROMATIC: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+	Scale.JAPANESE: [0, 2, 3, 7, 8],  # Hirajoshi
+	Scale.EGYPTIAN: [0, 2, 5, 7, 10],  # Suspended pentatonic
+	Scale.HUNGARIAN_MINOR: [0, 2, 3, 6, 7, 8, 11],
+	Scale.IRISH: [0, 2, 4, 5, 7, 9],  # Hexatonic, common in Irish trad
+}
+
+func get_scale_notes(start_midi: int, scale_type: Scale, num_notes: int = 16) -> Array:
+	"""
+	Generate a list of MIDI notes in a given scale.
+	
+	Args:
+		start_midi: Starting MIDI note number (e.g., 60 for middle C)
+		scale_type: Scale enum value
+		num_notes: How many notes to generate (default 16)
+	
+	Returns:
+		Array of MIDI note numbers
+	"""
+	var intervals = scale_intervals[scale_type]
+	var notes = []
+	
+	var octave = 0
+	var scale_index = 0
+	
+	for i in range(num_notes):
+		# Calculate the MIDI note
+		var note = start_midi + intervals[scale_index] + (octave * 12)
+		notes.append(note)
+		
+		# Move to next note in scale
+		scale_index += 1
+		
+		# If we've gone through all intervals, go to next octave
+		if scale_index >= intervals.size():
+			scale_index = 0
+			octave += 1
+	
+	return notes
+
+
+var midi_notes = []
+
+# Example usage for your sequencer:
+func setup_note_grid():
+	# Start at C3 (MIDI 48) with a minor pentatonic scale	
+	midi_notes = get_scale_notes(48, Scale.PENTATONIC_MINOR)
+	
+	# Or for Irish trad feel, start at D4 with Irish hexatonic
+	# var midi_notes = get_scale_notes(62, Scale.IRISH)  # D4
+	
+	# Now midi_notes[row] gives you the MIDI note for that row
+	for row in range(notes):
+		var midi_note = midi_notes[row]
+		print("Row %d = MIDI note %d" % [row, midi_note])
+
+
+@onready var mm:MultiMeshInstance3D = $MultiMeshInstance3D
+
+func test_sequence():
+	sequence[0][0] = true
+	sequence[4][5] = true
+	sequence[5][7] = true
+	sequence[1][8] = true
+	sequence[1][2] = true
+	sequence[3][3] = true
+	sequence[3][4] = true
+	sequence[2][6] = true
+
+func initialise_sequence(rows, cols):
+	for i in range(rows):
+		var row = []
+		for j in range(cols):
+			row.append(false)
+		sequence.append(row)
+	self.rows = rows
+	self.cols = cols
+	
+func _process(delta: float) -> void:
+	assign_colors()
+
+func assign_colors():
+	var i = 0
+	for col in range(steps):				
+		for row in range(notes):
+			var c = in_color if sequence[row][col] else out_color
+			mm.multimesh.set_instance_color(i, c)
+			i += 1
+
+
+
+var asp_index = 0
+
+func print_sequence():
+	print()
+	for row in range(notes -1, -1, -1):
+		var s = ""
+		for col in range(steps):
+			s += "1" if sequence[row][col] else "0" 
+		print(s)
+		
+func play_sample(e, i):
+	
+	# print("play sample:" + str(i))
+	var m = InputEventMIDI.new()
+	m.message = MIDI_MESSAGE_NOTE_ON
+	m.pitch = midi_notes[i]
+	m.velocity = 100
+	m.channel = 1
+	
+	
+	$"../MidiPlayer".receive_raw_midi_message(m)
+	
+	await get_tree().create_timer(1.0).timeout
+	
+	m = InputEventMIDI.new()
+	m.message = MIDI_MESSAGE_NOTE_OFF
+	m.pitch = midi_notes[i]
+	m.velocity = 0
+	m.channel = 1
+	$"../MidiPlayer".receive_raw_midi_message(m)
+	
+	
+func toggle(e, row, col):
+	print("toggle " + str(row) + " " + str(col))
+	sequence[row][col] = ! sequence[row][col]
+	play_sample(0, row)
+	
+
+var s = 0.08
+var spacer = 1.1
+
+func make_sequencer():	
+	
+	mm.multimesh.instance_count = steps * notes
+	var i = 0 
+	for col in range(steps):				
+		for row in range(notes):
+			var pad = pad_scene.instantiate()
+			
+			var p = Vector3(s * col * spacer, s * row * spacer, 0)
+			pad.position = p		
+			# pad.rotation = rotation
+			#var tm = TextMesh.new()
+			#tm.font = font
+			#tm.font_size = 1
+			#tm.depth = 0.005
+			## tm.text = str(row) + "," + str(col)
+			#tm.text = file_names[row]
+			#pad.get_node("MeshInstance3D2").mesh = tm
+			var t = Transform3D()
+			
+			var s1 = 0.7
+			t = t.scaled(Vector3(s * s1, s * s1, s * s1))
+			t.origin = p
+			mm.multimesh.set_instance_transform(i, t)
+			i += 1
+			pad.area_entered.connect(toggle.bind(row, col))
+			add_child(pad)
+
+
+func play_step(col):
+	var p = Vector3(s * col * spacer, s * -1 * spacer, 0)
+			
+	$timer_ball.position = p
+	for row in range(rows):
+		if sequence[row][col]:
+			play_sample(0, row)
+
+var step_index:int = 0
+
+func _on_timer_timeout() -> void:
+	play_step(step_index)
+	step_index = (step_index + 1) % steps
+	pass # Replace with function body.
+
+
+func _on_start_stop_area_entered(area: Area3D) -> void:
+	# $"../sequencer/Timer".start()
+	
+	if $Timer.is_stopped():
+		start.emit()
+		$Timer.start()
+	else:
+		stop.emit()
+		$Timer.stop()
+	pass # Replace with function body.
+
+var root_note = 60
+
+func _on_up_area_entered(area: Area3D) -> void:
+	root_note = root_note + 12
+	midi_notes = get_scale_notes(root_note, mucical_scale)
+
+	pass # Replace with function body.
+
+
+func _on_down_area_entered(area: Area3D) -> void:
+	root_note = root_note - 12
+	midi_notes = get_scale_notes(root_note, mucical_scale)
+	pass # Replace with function body.
+	
+	
+	
+	
+
+
+func _on_scale_area_entered(area: Area3D) -> void:
+	mucical_scale = (mucical_scale + 1) % Scale.size()
+	print("Scale: " + str(mucical_scale))
+	midi_notes = get_scale_notes(root_note, mucical_scale)
+	pass # Replace with function body.
+
+
+func _on_up_semi_area_entered(area: Area3D) -> void:
+	root_note += 1
+	midi_notes = get_scale_notes(root_note, mucical_scale)	
+	pass # Replace with function body.
+
+
+func _on_down_semi_area_entered(area: Area3D) -> void:
+	root_note -= 1
+	midi_notes = get_scale_notes(root_note, mucical_scale)
+	pass # Replace with function body.
