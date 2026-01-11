@@ -24,15 +24,26 @@ signal stop
 @export var out_color:Color
 @export var in_color:Color
 
-@export var midi_channel = 1
-@export var root = 1
+@export var instrument:int = 1
+@export var midi_channel:int = 1
+@export var root_note:int = 68
 
+@onready var midi_player:MidiPlayer = $"../MidiPlayer"
+
+func change_instrument(channel: int, program: int):
+	var midi_event = InputEventMIDI.new()
+	midi_event.channel = channel
+	midi_event.message = MIDI_MESSAGE_PROGRAM_CHANGE
+	midi_event.instrument = program
+	midi_player.receive_raw_midi_message(midi_event)
 
 func _ready():
 	# load_samples()
 	initialise_sequence(notes, steps)
 	make_sequencer()
 	midi_notes = get_scale_notes(root_note, mucical_scale)
+	
+	change_instrument(midi_channel, instrument)
 
 
 enum Scale {
@@ -125,7 +136,7 @@ var midi_notes = []
 # Example usage for your sequencer:
 func setup_note_grid():
 	# Start at C3 (MIDI 48) with a minor pentatonic scale	
-	midi_notes = get_scale_notes(root, Scale.PENTATONIC_MINOR)
+	midi_notes = get_scale_notes(root_note, Scale.PENTATONIC_MINOR)
 	
 	# Or for Irish trad feel, start at D4 with Irish hexatonic
 	# var midi_notes = get_scale_notes(62, Scale.IRISH)  # D4
@@ -192,9 +203,8 @@ func play_sample(e, i):
 	m.pitch = note
 	m.velocity = 100
 	m.channel = midi_channel
-	
-	
-	$"../MidiPlayer".receive_raw_midi_message(m)
+		
+	midi_player.receive_raw_midi_message(m)
 	
 	await get_tree().create_timer(1.0).timeout
 	
@@ -202,13 +212,13 @@ func play_sample(e, i):
 	m.message = MIDI_MESSAGE_NOTE_OFF
 	m.pitch = note
 	m.velocity = 0
+	m.instrument = instrument
 	m.channel = midi_channel
-	$"../MidiPlayer".receive_raw_midi_message(m)
-	
+	midi_player.receive_raw_midi_message(m)
 	
 func toggle(area, row, col):
 	print("Strike " + str(row) + " " + str(col))
-	var hand = area.get_parent()
+	var hand = area.get_parent().get_parent().get_parent().get_parent().get_parent()
 	if hand.gesture == "Index Pinch":
 		sequence[row][col] = ! sequence[row][col]
 	play_sample(0, row)
@@ -272,8 +282,6 @@ func _on_start_stop_area_entered(area: Area3D) -> void:
 		stop.emit()
 		$Timer.stop()
 	pass # Replace with function body.
-
-var root_note = 60
 
 func _on_up_area_entered(area: Area3D) -> void:
 	root_note = root_note + 12

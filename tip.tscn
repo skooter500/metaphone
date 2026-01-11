@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3 uid="uid://cend6ikv2su2t"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_00tvn"]
+radius = 0.01
+
+[node name="tip5" type="BoneAttachment3D"]
+transform = Transform3D(-0.034004584, -0.3591568, -0.9326572, 0.96170473, -0.26570606, 0.06725704, -0.2719686, -0.8946539, 0.35443816, 0, 0, 0)
+bone_name = "RightLittleTip"
+bone_idx = 24
+
+[node name="right_hand" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1.0000002, 0, 0, 0, 1.0000004, 0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="right_hand"]
+shape = SubResource("SphereShape3D_00tvn")
