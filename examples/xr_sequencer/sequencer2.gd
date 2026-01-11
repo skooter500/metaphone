@@ -1,14 +1,10 @@
 extends Marker3D
 
-var samples:Array
-var players:Array
-
 @export var font:Font 
 
 var sequence = []
 var file_names = []
 
-@export var path_str = "" 
 @export var pad_scene:PackedScene
 
 @export var steps:int = 8
@@ -23,6 +19,10 @@ signal stop
 
 @export var out_color:Color
 @export var in_color:Color
+@export var hit_color:Color
+
+enum Step {OFF, ON, HIT}
+
 
 @export var instrument:int = 1
 @export var midi_channel:int = 1
@@ -150,20 +150,20 @@ func setup_note_grid():
 @onready var mm:MultiMeshInstance3D = $MultiMeshInstance3D
 
 func test_sequence():
-	sequence[0][0] = true
-	sequence[4][5] = true
-	sequence[5][7] = true
-	sequence[1][8] = true
-	sequence[1][2] = true
-	sequence[3][3] = true
-	sequence[3][4] = true
-	sequence[2][6] = true
+	sequence[0][0] = Step.ON
+	sequence[4][5] = Step.ON
+	sequence[5][7] = Step.ON
+	sequence[1][8] = Step.ON
+	sequence[1][2] = Step.ON
+	sequence[3][3] = Step.ON
+	sequence[3][4] = Step.ON
+	sequence[2][6] = Step.ON
 
 func initialise_sequence(rows, cols):
 	for i in range(rows):
 		var row = []
 		for j in range(cols):
-			row.append(false)
+			row.append(Step.OFF)
 		sequence.append(row)
 	self.rows = rows
 	self.cols = cols
@@ -175,7 +175,14 @@ func assign_colors():
 	var i = 0
 	for col in range(steps):				
 		for row in range(notes):
-			var c = in_color if sequence[row][col] else out_color
+			var c
+			match sequence[row][col]:
+				Step.OFF:
+					c = out_color
+				Step.ON:
+					c = in_color
+				Step.HIT:
+					c = hit_color					
 			mm.multimesh.set_instance_color(i, c)
 			i += 1
 
@@ -223,9 +230,14 @@ func toggle(area, row, col):
 	print("Strike " + str(row) + " " + str(col))
 	var hand = area.get_parent().get_parent().get_parent().get_parent().get_parent()
 	if hand.gesture == "Index Pinch":
-		sequence[row][col] = ! sequence[row][col]
+		sequence[row][col] = Step.ON if sequence[row][col] == Step.OFF or sequence[row][col] == Step.HIT else Step.OFF  
+	else:
+		if sequence[row][col] != Step.ON: sequence[row][col] = Step.HIT
 	play_sample(0, row)
 	
+func hand_exited(area, row, col):
+	if sequence[row][col] != Step.ON:
+		sequence[row][col] = Step.OFF
 
 var s = 0.08
 var spacer = 1.1
@@ -256,6 +268,7 @@ func make_sequencer():
 			mm.multimesh.set_instance_transform(i, t)
 			i += 1
 			pad.area_entered.connect(toggle.bind(row, col))
+			pad.area_exited.connect(hand_exited.bind(row, col))
 			add_child(pad)
 
 

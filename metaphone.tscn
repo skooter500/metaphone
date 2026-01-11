@@ -1,14 +1,10 @@
-[gd_scene load_steps=31 format=3 uid="uid://c8tx40me7j55t"]
+[gd_scene load_steps=22 format=3 uid="uid://c8tx40me7j55t"]
 
 [ext_resource type="PackedScene" uid="uid://cuyd1qv0pn26e" path="res://addons/midi/MidiPlayer.tscn" id="1_83we6"]
 [ext_resource type="Script" uid="uid://nxajcnxqcaey" path="res://timer.gd" id="1_byv7j"]
-[ext_resource type="PackedScene" uid="uid://2i1nqhynnlm0" path="res://button.tscn" id="4_byv7j"]
 [ext_resource type="PackedScene" uid="uid://cend6ikv2su2t" path="res://tip.tscn" id="7_65ndq"]
 [ext_resource type="Script" uid="uid://e0tg3ajyvad4" path="res://hand.gd" id="9_00tvn"]
 [ext_resource type="PackedScene" uid="uid://b7dvkr5ss01as" path="res://sequencer.tscn" id="17_s2ckv"]
-[ext_resource type="Script" uid="uid://crm1vgeaih5wn" path="res://examples/xr_sequencer/sequencer2.gd" id="21_1eg4j"]
-[ext_resource type="PackedScene" uid="uid://dm1qa5btl0821" path="res://examples/xr_sequencer/pad_a.tscn" id="23_bo4sn"]
-[ext_resource type="Material" uid="uid://bwy778jyvpj15" path="res://examples/tank_game_3d/seq_mat.tres" id="24_dclji"]
 [ext_resource type="Script" uid="uid://bs8nmn7mjqaek" path="res://examples/bge/start_passthrough.gd" id="30_b66op"]
 [ext_resource type="Material" uid="uid://dvo75cymypytd" path="res://examples/tank_game_3d/green.tres" id="31_11imp"]
 [ext_resource type="Script" uid="uid://muj58x3jqroj" path="res://addons/hand_pose_detector/hand_pose_detector.gd" id="33_g5gje"]
@@ -23,25 +19,6 @@
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ieg28"]
 radius = 0.01
 height = 0.04
-
-[sub_resource type="Resource" id="Resource_byv7j"]
-metadata/__load_path__ = "res://fonts/Hyperspace.otf"
-
-[sub_resource type="SphereMesh" id="SphereMesh_00tvn"]
-radius = 0.02
-height = 0.04
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_byv7j"]
-transparency = 1
-vertex_color_use_as_albedo = true
-
-[sub_resource type="BoxMesh" id="BoxMesh_byv7j"]
-material = SubResource("StandardMaterial3D_byv7j")
-
-[sub_resource type="MultiMesh" id="MultiMesh_00tvn"]
-transform_format = 1
-use_colors = true
-mesh = SubResource("BoxMesh_byv7j")
 
 [sub_resource type="AudioStreamMicrophone" id="AudioStreamMicrophone_wjjwd"]
 
@@ -145,57 +122,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.8232094)
 
 [node name="MidiPlayer" parent="instruments" instance=ExtResource("1_83we6")]
 key_shift = 2
-soundfont = "res://assets/GM.sf2"
+soundfont = "res://assets/Aspirin-Stereo.sf2"
 
-[node name="sequencer2" type="Marker3D" parent="instruments"]
-transform = Transform3D(0.9999999, 0, 0, 0, 1, 0, 0, 0, 0.9999999, 0.37691236, 0.7745184, -0.092311054)
-script = ExtResource("21_1eg4j")
-font = SubResource("Resource_byv7j")
-path_str = "res://drumset"
-pad_scene = ExtResource("23_bo4sn")
-steps = 16
-out_color = Color(0.86373055, 0.8657998, 7.70092e-07, 0.3882353)
-in_color = Color(0.90999013, 0.364511, 1.92523e-07, 0.52156866)
-instrument = 7
-
-[node name="controls" type="Marker3D" parent="instruments/sequencer2"]
-transform = Transform3D(1.0000001, 0, -2.9802322e-08, 0, 1, 0, 2.9802322e-08, 0, 1.0000001, -0.1, 0, 0)
-
-[node name="up_semi" parent="instruments/sequencer2/controls" instance=ExtResource("4_byv7j")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.38833192, 0.22768164, -0.09116878)
-
-[node name="down_semi" parent="instruments/sequencer2/controls" instance=ExtResource("4_byv7j")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.38957015, 0.09743416, -0.18233755)
-
-[node name="stop_start" parent="instruments/sequencer2/controls" instance=ExtResource("4_byv7j")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.037737757, -0.13521773, -0.045584388)
-
-[node name="up" parent="instruments/sequencer2/controls" instance=ExtResource("4_byv7j")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.037737757, 0.20531154, -0.045584388)
-
-[node name="down" parent="instruments/sequencer2/controls" instance=ExtResource("4_byv7j")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.037737757, 0.10212934, -0.045584388)
-
-[node name="scale_up" parent="instruments/sequencer2/controls" instance=ExtResource("4_byv7j")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.20677093, 0.47066367, -0.045584388)
-
-[node name="scale_down" parent="instruments/sequencer2/controls" instance=ExtResource("4_byv7j")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.20793706, 0.37140548, -0.091168776)
-
-[node name="Timer" type="Timer" parent="instruments/sequencer2"]
-wait_time = 0.2
-
-[node name="timer_ball" type="MeshInstance3D" parent="instruments/sequencer2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 0)
-mesh = SubResource("SphereMesh_00tvn")
-surface_material_override/0 = ExtResource("24_dclji")
-
-[node name="MultiMeshInstance3D" type="MultiMeshInstance3D" parent="instruments/sequencer2"]
-multimesh = SubResource("MultiMesh_00tvn")
-
-[node name="sequencer" parent="instruments" instance=ExtResource("17_s2ckv")]
-transform = Transform3D(0.9999999, 0, 0, 0, 1, 0, 0, 0, 0.9999999, 0.37691236, 0.7745184, 1.3168678)
-instrument = 20
+[node name="drums" parent="instruments" instance=ExtResource("17_s2ckv")]
+transform = Transform3D(0.9999999, 0, 0, 0, 1, 0, 0, 0, 0.9999999, 0.0060589314, 0.7745184, 0.679759)
+hit_color = Color(0, 0.24, 0.96, 0.32156864)
+midi_channel = 9
+root_note = 35
 
 [node name="record" type="Node" parent="instruments"]
 
@@ -238,14 +171,6 @@ light_energy = 16.0
 [connection signal="pose_started" from="XROrigin3D/left/HandPoseDetector" to="XROrigin3D/left" method="_on_hand_pose_detector_pose_started"]
 [connection signal="pose_ended" from="XROrigin3D/right/HandPoseDetector" to="XROrigin3D/right" method="_on_hand_pose_detector_pose_ended"]
 [connection signal="pose_started" from="XROrigin3D/right/HandPoseDetector" to="XROrigin3D/right" method="_on_hand_pose_detector_pose_started"]
-[connection signal="area_entered" from="instruments/sequencer2/controls/up_semi" to="instruments/sequencer2" method="_on_up_semi_area_entered"]
-[connection signal="area_entered" from="instruments/sequencer2/controls/down_semi" to="instruments/sequencer2" method="_on_down_semi_area_entered"]
-[connection signal="area_entered" from="instruments/sequencer2/controls/stop_start" to="instruments/sequencer2" method="_on_start_stop_area_entered"]
-[connection signal="area_entered" from="instruments/sequencer2/controls/up" to="instruments/sequencer2" method="_on_up_area_entered"]
-[connection signal="area_entered" from="instruments/sequencer2/controls/down" to="instruments/sequencer2" method="_on_down_area_entered"]
-[connection signal="area_entered" from="instruments/sequencer2/controls/scale_up" to="instruments/sequencer2" method="_on_scale_area_entered"]
-[connection signal="area_entered" from="instruments/sequencer2/controls/scale_down" to="instruments/sequencer2" method="_on_scale_down_area_entered"]
-[connection signal="timeout" from="instruments/sequencer2/Timer" to="instruments/sequencer2" method="_on_timer_timeout"]
 
 [editable path="XROrigin3D/left/LeftHandHumanoid2"]
 [editable path="XROrigin3D/right/RightHandHumanoid2"]
