@@ -195,6 +195,7 @@ func play_sample(e, i):
 	
 	# Potential race condition!!!!
 	# Great example
+	change_instrument(midi_channel, instrument)
 	
 	var note = midi_notes[i]
 	# print("play sample:" + str(i))
@@ -203,6 +204,8 @@ func play_sample(e, i):
 	m.pitch = note
 	m.velocity = 100
 	m.channel = midi_channel
+	
+	print("Note: " + str(note) + " Channel: " + str(midi_channel))
 		
 	midi_player.receive_raw_midi_message(m)
 	

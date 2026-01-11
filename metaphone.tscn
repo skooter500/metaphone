@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://c8tx40me7j55t"]
+[gd_scene load_steps=31 format=3 uid="uid://c8tx40me7j55t"]
 
 [ext_resource type="PackedScene" uid="uid://cuyd1qv0pn26e" path="res://addons/midi/MidiPlayer.tscn" id="1_83we6"]
 [ext_resource type="Script" uid="uid://nxajcnxqcaey" path="res://timer.gd" id="1_byv7j"]
@@ -44,6 +44,9 @@ use_colors = true
 mesh = SubResource("BoxMesh_byv7j")
 
 [sub_resource type="AudioStreamMicrophone" id="AudioStreamMicrophone_wjjwd"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_s2ckv"]
+size = Vector3(1, 0.1, 0.1)
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_00q4b"]
 size = Vector2(100, 100)
@@ -153,7 +156,7 @@ pad_scene = ExtResource("23_bo4sn")
 steps = 16
 out_color = Color(0.86373055, 0.8657998, 7.70092e-07, 0.3882353)
 in_color = Color(0.90999013, 0.364511, 1.92523e-07, 0.52156866)
-root_note = 36
+instrument = 7
 
 [node name="controls" type="Marker3D" parent="instruments/sequencer2"]
 transform = Transform3D(1.0000001, 0, -2.9802322e-08, 0, 1, 0, 2.9802322e-08, 0, 1.0000001, -0.1, 0, 0)
@@ -192,6 +195,7 @@ multimesh = SubResource("MultiMesh_00tvn")
 
 [node name="sequencer" parent="instruments" instance=ExtResource("17_s2ckv")]
 transform = Transform3D(0.9999999, 0, 0, 0, 1, 0, 0, 0, 0.9999999, 0.37691236, 0.7745184, 1.3168678)
+instrument = 20
 
 [node name="record" type="Node" parent="instruments"]
 
@@ -200,6 +204,10 @@ stream = SubResource("AudioStreamMicrophone_wjjwd")
 autoplay = true
 
 [node name="analyzer" type="Node" parent="instruments"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="instruments"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2017696, 1.3538728, -0.18026552)
+mesh = SubResource("BoxMesh_s2ckv")
 
 [node name="start_passthrough" type="Node" parent="."]
 script = ExtResource("30_b66op")
