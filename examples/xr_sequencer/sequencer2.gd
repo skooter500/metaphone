@@ -99,7 +99,7 @@ func _ready():
 	in_color = Color.from_hsv(randf(), 1, 1, 0.5)
 	out_color = Color.from_hsv(fmod(in_color.h + 0.3, 1.0), 1, 1, 0.5)
 	hit_color = Color.from_hsv(fmod(out_color.h + 0.3, 1.0), 1, 1, 0.5)
-	
+	$timer_ball.get_surface_override_material(0).albedo_color = in_color
 	assign_colors()
 	midi_notes = get_scale_notes(root_note, mucical_scale)
 	

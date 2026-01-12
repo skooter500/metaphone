@@ -67,7 +67,6 @@ script = ExtResource("12_ucien")
 
 [node name="Timer" type="Timer" parent="instruments"]
 wait_time = 0.2
-autostart = true
 
 [node name="MidiPlayer" parent="instruments" instance=ExtResource("1_83we6")]
 key_shift = 2
@@ -93,7 +92,7 @@ visible = false
 mesh = SubResource("BoxMesh_s2ckv")
 
 [node name="start_stop" parent="instruments" instance=ExtResource("16_8d825")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.72084427, 1.1601084, 0.4805627)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.72084427, 1.2822423, 0.4805627)
 
 [node name="sequencer" parent="instruments" instance=ExtResource("17_s2ckv")]
 transform = Transform3D(-4.3711385e-08, 0, 0.9999999, 0, 1, 0, -0.9999999, 0, -4.3711385e-08, -0.9509082, 0.8463087, 0)
@@ -113,23 +112,23 @@ root_note = 60
 multimesh = SubResource("MultiMesh_65ndq")
 
 [node name="mode" parent="instruments" instance=ExtResource("6_s2ckv")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -0.6742881, 1.3001149, 0.47975582)
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -0.6742881, 1.4222487, 0.47975582)
 text = "REVERB"
 horizontal_alignment = 2
 
 [node name="reverb" parent="instruments" instance=ExtResource("16_8d825")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.72084427, 1.295292, 0.4805627)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.72084427, 1.4174259, 0.4805627)
 
 [node name="mode3" parent="instruments" instance=ExtResource("6_s2ckv")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -0.6742881, 1.387475, 0.47975582)
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -0.6742881, 1.5096089, 0.47975582)
 text = "DELAY"
 horizontal_alignment = 2
 
 [node name="delay" parent="instruments" instance=ExtResource("16_8d825")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.72084427, 1.3826522, 0.4805627)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.72084427, 1.504786, 0.4805627)
 
 [node name="mode2" parent="instruments" instance=ExtResource("6_s2ckv")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -0.66227347, 1.1633335, 0.47975582)
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -0.66227347, 1.2854674, 0.47975582)
 text = "STOP/START"
 horizontal_alignment = 2
 

@@ -4,13 +4,16 @@
 [ext_resource type="PackedScene" uid="uid://dm1qa5btl0821" path="res://examples/xr_sequencer/pad_a.tscn" id="2_1yhx7"]
 [ext_resource type="PackedScene" uid="uid://2i1nqhynnlm0" path="res://button.tscn" id="3_qjhr7"]
 [ext_resource type="PackedScene" uid="uid://cf4fvq6d5wdue" path="res://label.tscn" id="4_1yhx7"]
-[ext_resource type="Material" uid="uid://bwy778jyvpj15" path="res://examples/tank_game_3d/seq_mat.tres" id="4_g1h6b"]
 
 [sub_resource type="Resource" id="Resource_byv7j"]
 metadata/__load_path__ = "res://fonts/Hyperspace.otf"
 
 [sub_resource type="BoxMesh" id="BoxMesh_twh6a"]
 size = Vector3(0.06, 0.06, 0.06)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_twh6a"]
+transparency = 1
+albedo_color = Color(0.35000038, 0, 1, 0.47843137)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_byv7j"]
 transparency = 1
@@ -36,7 +39,7 @@ instrument = 9
 midi_channel = 2
 
 [node name="controls" type="Marker3D" parent="."]
-transform = Transform3D(1.0000001, 0, -2.9802322e-08, 0, 1, 0, 2.9802322e-08, 0, 1.0000001, 0.14864141, -0.46659946, 0.072165936)
+transform = Transform3D(1.0000001, 0, -2.9802322e-08, 0, 1, 0, 2.9802322e-08, 0, 1.0000001, 0.14864141, -0.26539487, 0.072165936)
 
 [node name="up_semi" parent="controls" instance=ExtResource("3_qjhr7")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.49900213, 0.8422569, -0.04448858)
@@ -100,7 +103,7 @@ wait_time = 0.2
 [node name="timer_ball" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0782841, 0)
 mesh = SubResource("BoxMesh_twh6a")
-surface_material_override/0 = ExtResource("4_g1h6b")
+surface_material_override/0 = SubResource("StandardMaterial3D_twh6a")
 
 [node name="MultiMeshInstance3D" type="MultiMeshInstance3D" parent="."]
 multimesh = SubResource("MultiMesh_twh6a")
