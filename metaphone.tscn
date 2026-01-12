@@ -1,7 +1,8 @@
-[gd_scene load_steps=33 format=3 uid="uid://c8tx40me7j55t"]
+[gd_scene load_steps=34 format=3 uid="uid://c8tx40me7j55t"]
 
 [ext_resource type="PackedScene" uid="uid://cuyd1qv0pn26e" path="res://addons/midi/MidiPlayer.tscn" id="1_83we6"]
 [ext_resource type="Script" uid="uid://nxajcnxqcaey" path="res://timer.gd" id="1_byv7j"]
+[ext_resource type="Script" uid="uid://ox8smfnahvcm" path="res://xr_camera_3d.gd" id="2_8d825"]
 [ext_resource type="PackedScene" uid="uid://cend6ikv2su2t" path="res://tip.tscn" id="7_65ndq"]
 [ext_resource type="Script" uid="uid://e0tg3ajyvad4" path="res://hand.gd" id="9_00tvn"]
 [ext_resource type="Script" uid="uid://n7iy2lr1dvkr" path="res://instruments.gd" id="12_ucien"]
@@ -20,10 +21,6 @@
 [ext_resource type="PackedScene" uid="uid://df5hynbooj1uj" path="res://addons/hand_pose_detector/hand_pose_detector.tscn" id="38_4ru4y"]
 [ext_resource type="PackedScene" uid="uid://b2447e5p6kwug" path="res://examples/room/scene_anchor.tscn" id="39_5wcqy"]
 [ext_resource type="PackedScene" uid="uid://cukl4cie1tact" path="res://examples/room/scene_global_mesh.tscn" id="40_c1vpu"]
-
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ieg28"]
-radius = 0.01
-height = 0.04
 
 [sub_resource type="AudioStreamMicrophone" id="AudioStreamMicrophone_wjjwd"]
 
@@ -53,6 +50,10 @@ transform_format = 1
 use_colors = true
 mesh = SubResource("BoxMesh_byv7j")
 
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ieg28"]
+radius = 0.01
+height = 0.04
+
 [sub_resource type="PlaneMesh" id="PlaneMesh_00q4b"]
 size = Vector2(100, 100)
 
@@ -67,83 +68,6 @@ ambient_light_color = Color(1, 1, 1, 1)
 
 [node name="Timer" type="Timer" parent="."]
 script = ExtResource("1_byv7j")
-
-[node name="XROrigin3D" type="XROrigin3D" parent="."]
-
-[node name="XRCamera3D" type="XRCamera3D" parent="XROrigin3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.10548, 0)
-near = 0.001
-
-[node name="AudioListener3D" type="AudioListener3D" parent="XROrigin3D/XRCamera3D"]
-
-[node name="left" type="XRNode3D" parent="XROrigin3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.28372958, 0, 0)
-tracker = &"/user/hand_tracker/left"
-show_when_tracked = true
-script = ExtResource("9_00tvn")
-
-[node name="HandPoseDetector" type="Node" parent="XROrigin3D/left"]
-script = ExtResource("33_g5gje")
-hand_pose_set = ExtResource("34_63uls")
-
-[node name="LeftHandHumanoid2" parent="XROrigin3D/left" instance=ExtResource("35_lbacc")]
-
-[node name="LeftHandHumanoidMesh" parent="XROrigin3D/left/LeftHandHumanoid2/LeftHandHumanoid/Skeleton3D" index="0"]
-surface_material_override/0 = ExtResource("36_4cadk")
-
-[node name="XRHandModifier3D" type="XRHandModifier3D" parent="XROrigin3D/left/LeftHandHumanoid2/LeftHandHumanoid/Skeleton3D" index="1"]
-
-[node name="tip5" parent="XROrigin3D/left/LeftHandHumanoid2/LeftHandHumanoid/Skeleton3D" index="2" instance=ExtResource("7_65ndq")]
-transform = Transform3D(0.01489234, 0.39270008, 0.919546, -0.9930924, 0.11285266, -0.03211129, -0.11638325, -0.91271573, 0.39166808, -0.01110013, 0.04294307, -0.17161417)
-bone_name = "LeftIndexTip"
-bone_idx = 9
-
-[node name="right" type="XRNode3D" parent="XROrigin3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.382, 0, 0)
-tracker = &"/user/hand_tracker/right"
-show_when_tracked = true
-script = ExtResource("9_00tvn")
-
-[node name="RightHandHumanoid2" parent="XROrigin3D/right" instance=ExtResource("37_qy652")]
-
-[node name="Skeleton3D" parent="XROrigin3D/right/RightHandHumanoid2/RightHandHumanoid" index="0"]
-bones/0/position = Vector3(-0.009999533, 0.020026566, 3.5932288e-05)
-bones/0/rotation = Quaternion(0.15032642, 0.82222533, -0.41320056, -0.36140388)
-bones/0/scale = Vector3(0.99999976, 0.9999999, 0.9999999)
-bones/9/position = Vector3(-0.0144017115, -0.18588886, 0.055714846)
-bones/9/rotation = Quaternion(0.029629126, 0.7843349, -0.44617033, 0.42996845)
-bones/9/scale = Vector3(1, 1.0000001, 1.0000002)
-bones/13/position = Vector3(-0.014042869, -0.15854816, 0.04854116)
-bones/13/rotation = Quaternion(0.12692279, 0.7842564, -0.48233, 0.36903968)
-bones/13/scale = Vector3(1, 1.0000002, 1.0000001)
-
-[node name="XRHandModifier3D" type="XRHandModifier3D" parent="XROrigin3D/right/RightHandHumanoid2/RightHandHumanoid/Skeleton3D" index="0"]
-hand_tracker = &"/user/hand_tracker/right"
-
-[node name="RightHandHumanoidMesh" parent="XROrigin3D/right/RightHandHumanoid2/RightHandHumanoid/Skeleton3D" index="1"]
-surface_material_override/0 = ExtResource("36_4cadk")
-
-[node name="tip5" type="BoneAttachment3D" parent="XROrigin3D/right/RightHandHumanoid2/RightHandHumanoid/Skeleton3D" index="2"]
-transform = Transform3D(0.9999999, 4.4703484e-07, 1.4901161e-07, -1.1920929e-07, 0.9999999, 2.682209e-07, -1.3411045e-07, -1.4901161e-08, 1.0000002, 0, 0, 1.4901161e-08)
-bone_name = "RightIndexTip"
-bone_idx = 9
-
-[node name="right_hand" type="Area3D" parent="XROrigin3D/right/RightHandHumanoid2/RightHandHumanoid/Skeleton3D/tip5"]
-transform = Transform3D(1, 0, 0, 0, 1.0000002, 0, 0, 0, 1.0000004, 0, 0, 0)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="XROrigin3D/right/RightHandHumanoid2/RightHandHumanoid/Skeleton3D/tip5/right_hand"]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, -0.018, 0)
-shape = SubResource("CapsuleShape3D_ieg28")
-
-[node name="HandPoseDetector" parent="XROrigin3D/right" instance=ExtResource("38_4ru4y")]
-hand_tracker_name = "/user/hand_tracker/right"
-hand_pose_set = ExtResource("34_63uls")
-
-[node name="OpenXRFbSceneManager" type="OpenXRFbSceneManager" parent="XROrigin3D"]
-default_scene = ExtResource("39_5wcqy")
-auto_create = false
-visible = false
-scenes/global_mesh = ExtResource("40_c1vpu")
 
 [node name="instruments" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.8232094)
@@ -277,6 +201,85 @@ multimesh = SubResource("MultiMesh_s2ckv")
 [node name="start_stop" parent="instruments" instance=ExtResource("16_8d825")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1601084, 0)
 
+[node name="XROrigin3D" type="XROrigin3D" parent="."]
+
+[node name="XRCamera3D" type="XRCamera3D" parent="XROrigin3D" node_paths=PackedStringArray("spawn_in_front")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.10548, 0)
+near = 0.001
+script = ExtResource("2_8d825")
+spawn_in_front = NodePath("../../instruments")
+
+[node name="AudioListener3D" type="AudioListener3D" parent="XROrigin3D/XRCamera3D"]
+
+[node name="left" type="XRNode3D" parent="XROrigin3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.28372958, 0, 0)
+tracker = &"/user/hand_tracker/left"
+show_when_tracked = true
+script = ExtResource("9_00tvn")
+
+[node name="HandPoseDetector" type="Node" parent="XROrigin3D/left"]
+script = ExtResource("33_g5gje")
+hand_pose_set = ExtResource("34_63uls")
+
+[node name="LeftHandHumanoid2" parent="XROrigin3D/left" instance=ExtResource("35_lbacc")]
+
+[node name="LeftHandHumanoidMesh" parent="XROrigin3D/left/LeftHandHumanoid2/LeftHandHumanoid/Skeleton3D" index="0"]
+surface_material_override/0 = ExtResource("36_4cadk")
+
+[node name="XRHandModifier3D" type="XRHandModifier3D" parent="XROrigin3D/left/LeftHandHumanoid2/LeftHandHumanoid/Skeleton3D" index="1"]
+
+[node name="tip5" parent="XROrigin3D/left/LeftHandHumanoid2/LeftHandHumanoid/Skeleton3D" index="2" instance=ExtResource("7_65ndq")]
+transform = Transform3D(0.01489234, 0.39270008, 0.919546, -0.9930924, 0.11285266, -0.03211129, -0.11638325, -0.91271573, 0.39166808, -0.01110013, 0.04294307, -0.17161417)
+bone_name = "LeftIndexTip"
+bone_idx = 9
+
+[node name="right" type="XRNode3D" parent="XROrigin3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.382, 0, 0)
+tracker = &"/user/hand_tracker/right"
+show_when_tracked = true
+script = ExtResource("9_00tvn")
+
+[node name="RightHandHumanoid2" parent="XROrigin3D/right" instance=ExtResource("37_qy652")]
+
+[node name="Skeleton3D" parent="XROrigin3D/right/RightHandHumanoid2/RightHandHumanoid" index="0"]
+bones/0/position = Vector3(-0.009999533, 0.020026566, 3.5932288e-05)
+bones/0/rotation = Quaternion(0.15032642, 0.82222533, -0.41320056, -0.36140388)
+bones/0/scale = Vector3(0.99999976, 0.9999999, 0.9999999)
+bones/9/position = Vector3(-0.0144017115, -0.18588886, 0.055714846)
+bones/9/rotation = Quaternion(0.029629126, 0.7843349, -0.44617033, 0.42996845)
+bones/9/scale = Vector3(1, 1.0000001, 1.0000002)
+bones/13/position = Vector3(-0.014042869, -0.15854816, 0.04854116)
+bones/13/rotation = Quaternion(0.12692279, 0.7842564, -0.48233, 0.36903968)
+bones/13/scale = Vector3(1, 1.0000002, 1.0000001)
+
+[node name="XRHandModifier3D" type="XRHandModifier3D" parent="XROrigin3D/right/RightHandHumanoid2/RightHandHumanoid/Skeleton3D" index="0"]
+hand_tracker = &"/user/hand_tracker/right"
+
+[node name="RightHandHumanoidMesh" parent="XROrigin3D/right/RightHandHumanoid2/RightHandHumanoid/Skeleton3D" index="1"]
+surface_material_override/0 = ExtResource("36_4cadk")
+
+[node name="tip5" type="BoneAttachment3D" parent="XROrigin3D/right/RightHandHumanoid2/RightHandHumanoid/Skeleton3D" index="2"]
+transform = Transform3D(0.9999999, 4.4703484e-07, 1.4901161e-07, -1.1920929e-07, 0.9999999, 2.682209e-07, -1.3411045e-07, -1.4901161e-08, 1.0000002, 0, 0, 1.4901161e-08)
+bone_name = "RightIndexTip"
+bone_idx = 9
+
+[node name="right_hand" type="Area3D" parent="XROrigin3D/right/RightHandHumanoid2/RightHandHumanoid/Skeleton3D/tip5"]
+transform = Transform3D(1, 0, 0, 0, 1.0000002, 0, 0, 0, 1.0000004, 0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="XROrigin3D/right/RightHandHumanoid2/RightHandHumanoid/Skeleton3D/tip5/right_hand"]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, -0.018, 0)
+shape = SubResource("CapsuleShape3D_ieg28")
+
+[node name="HandPoseDetector" parent="XROrigin3D/right" instance=ExtResource("38_4ru4y")]
+hand_tracker_name = "/user/hand_tracker/right"
+hand_pose_set = ExtResource("34_63uls")
+
+[node name="OpenXRFbSceneManager" type="OpenXRFbSceneManager" parent="XROrigin3D"]
+default_scene = ExtResource("39_5wcqy")
+auto_create = false
+visible = false
+scenes/global_mesh = ExtResource("40_c1vpu")
+
 [node name="start_passthrough" type="Node" parent="."]
 script = ExtResource("30_b66op")
 
@@ -302,10 +305,6 @@ transform = Transform3D(-0.220772, -0.975312, -0.00516406, 0.254535, -0.0627264,
 light_energy = 16.0
 
 [connection signal="timeout" from="Timer" to="Timer" method="_on_timeout"]
-[connection signal="pose_ended" from="XROrigin3D/left/HandPoseDetector" to="XROrigin3D/left" method="_on_hand_pose_detector_pose_ended"]
-[connection signal="pose_started" from="XROrigin3D/left/HandPoseDetector" to="XROrigin3D/left" method="_on_hand_pose_detector_pose_started"]
-[connection signal="pose_ended" from="XROrigin3D/right/HandPoseDetector" to="XROrigin3D/right" method="_on_hand_pose_detector_pose_ended"]
-[connection signal="pose_started" from="XROrigin3D/right/HandPoseDetector" to="XROrigin3D/right" method="_on_hand_pose_detector_pose_started"]
 [connection signal="area_entered" from="instruments/sequencer/controls/up_semi" to="instruments/sequencer" method="_on_up_semi_area_entered"]
 [connection signal="area_entered" from="instruments/sequencer/controls/down_semi" to="instruments/sequencer" method="_on_down_semi_area_entered"]
 [connection signal="area_entered" from="instruments/sequencer/controls/stop_start" to="instruments/sequencer" method="_on_start_stop_area_entered"]
@@ -329,6 +328,10 @@ light_energy = 16.0
 [connection signal="area_entered" from="instruments/start_stop" to="instruments/drums" method="_on_start_stop_area_entered"]
 [connection signal="area_entered" from="instruments/start_stop" to="instruments/sequencer" method="_on_start_stop_area_entered"]
 [connection signal="area_entered" from="instruments/start_stop" to="instruments/sequencer2" method="_on_start_stop_area_entered"]
+[connection signal="pose_ended" from="XROrigin3D/left/HandPoseDetector" to="XROrigin3D/left" method="_on_hand_pose_detector_pose_ended"]
+[connection signal="pose_started" from="XROrigin3D/left/HandPoseDetector" to="XROrigin3D/left" method="_on_hand_pose_detector_pose_started"]
+[connection signal="pose_ended" from="XROrigin3D/right/HandPoseDetector" to="XROrigin3D/right" method="_on_hand_pose_detector_pose_ended"]
+[connection signal="pose_started" from="XROrigin3D/right/HandPoseDetector" to="XROrigin3D/right" method="_on_hand_pose_detector_pose_started"]
 
 [editable path="XROrigin3D/left/LeftHandHumanoid2"]
 [editable path="XROrigin3D/right/RightHandHumanoid2"]
