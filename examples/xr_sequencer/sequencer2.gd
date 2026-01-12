@@ -174,7 +174,13 @@ func initialise_sequence(rows, cols):
 		sequence.append(row)
 	
 func _process(delta: float) -> void:
+	update_labels()
 	pass
+
+func update_labels():
+	$controls/instrument.text = str(instrument)
+	$controls/root.text = str(root_note)
+	$controls/mode.text = str(scale)
 
 func assign_colors():
 	var i = 0
