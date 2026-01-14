@@ -103,18 +103,28 @@ func _ready():
 	hit_color = Color.from_hsv(fmod(out_color.h + 0.3, 1.0), 1, 1, 0.5)
 	$timer_ball.get_surface_override_material(0).albedo_color = in_color
 	assign_colors()
-	midi_notes = get_scale_notes(root_note, mucical_scale)
 	create_labels()
+	midi_notes = get_scale_notes(root_note, mucical_scale)	
 	change_instrument(midi_channel, instrument)
 	
+var labels = []
 	
 func create_labels():
 	for row in range(notes):
-		var label = label_scene.instantiate()
-		
-		var p = Vector3(s * -1 * spacer, s * row * spacer, 0)
+		var label:Label3D = label_scene.instantiate()		
+		var p = Vector3(s * -0.5 * spacer, s * row * spacer, 0)
 		label.position = p		
+		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 		add_child(label)
+		labels.push_back(label)
+		
+		label = label_scene.instantiate()		
+		p = Vector3(s * (steps + 0.5) * spacer, s * row * spacer, 0)
+		label.position = p		
+		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+		add_child(label)
+		labels.push_back(label)
+
 
 
 enum Scale {
@@ -191,7 +201,8 @@ func get_scale_notes(start_midi: int, scale_type: Scale, num_notes: int = 16) ->
 		# Calculate the MIDI note
 		var note = start_midi + intervals[scale_index] + (octave * 12)
 		notes.append(note)
-		
+		labels[i*2].text = midi_note_to_string(note)
+		labels[i*2  + 1].text = midi_note_to_string(note)
 		# Move to next note in scale
 		scale_index += 1
 		
@@ -199,6 +210,8 @@ func get_scale_notes(start_midi: int, scale_type: Scale, num_notes: int = 16) ->
 		if scale_index >= intervals.size():
 			scale_index = 0
 			octave += 1
+	
+	
 	
 	return notes
 
@@ -364,6 +377,10 @@ func make_sequencer():
 			pad.area_entered.connect(hand_entered.bind(row, col))
 			pad.area_exited.connect(hand_exited.bind(row, col))
 			add_child(pad)
+	timer_ball_top = $timer_ball.duplicate()
+	timer_ball_top.position = Vector3(0, s * (notes) * spacer, 0)
+	add_child(timer_ball_top)
+var timer_ball_top
 
 func play_sample_gate(e, row, col, duration):
 	var note = midi_notes[row]
@@ -388,7 +405,9 @@ func change_color_back(row, col):
 func play_step(col):
 	var p = Vector3(s * col * spacer, s * -1 * spacer, 0)
 			
-	$timer_ball.position = p
+	$timer_ball.position = p	
+	timer_ball_top.position = Vector3(0, s * (notes) * spacer, 0)
+	
 	if stopped:
 		return
 	for row in range(notes):
