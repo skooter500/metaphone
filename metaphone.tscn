@@ -95,7 +95,7 @@ mesh = SubResource("BoxMesh_s2ckv")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.72084427, 1.2822423, 0.4805627)
 
 [node name="sequencer" parent="instruments" instance=ExtResource("17_s2ckv")]
-transform = Transform3D(-4.3711385e-08, 0, 0.9999999, 0, 1, 0, -0.9999999, 0, -4.3711385e-08, -0.9509082, 0.8463087, 0)
+transform = Transform3D(-4.3711385e-08, 0, 0.9999999, 0, 1, 0, -0.9999999, 0, -4.3711385e-08, -0.9510298, 0.8463087, 5.312084e-12)
 instrument = 17
 midi_channel = 1
 root_note = 60
@@ -104,7 +104,7 @@ root_note = 60
 multimesh = SubResource("MultiMesh_s2ckv")
 
 [node name="sequencer2" parent="instruments" instance=ExtResource("17_s2ckv")]
-transform = Transform3D(0.9999999, 0, 0, 0, 1, 0, 0, 0, 0.9999999, -0.23772669, 0.8463087, -1.5024357)
+transform = Transform3D(0.9999999, 0, 0, 0, 1, 0, 0, 0, 0.9999999, -0.23772669, 0.8463087, -1.3263329)
 instrument = 25
 root_note = 60
 

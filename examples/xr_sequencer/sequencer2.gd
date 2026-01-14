@@ -28,6 +28,8 @@ enum Step {OFF, ON, HIT_ON, HIT_OFF}
 
 @onready var midi_player:MidiPlayer = $"../MidiPlayer"
 
+@export var label_scene:PackedScene
+
 func midi_note_to_string(midi_num: int) -> String:
 	# List of note names in an octave
 	var notes = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
@@ -102,15 +104,23 @@ func _ready():
 	$timer_ball.get_surface_override_material(0).albedo_color = in_color
 	assign_colors()
 	midi_notes = get_scale_notes(root_note, mucical_scale)
-	
+	create_labels()
 	change_instrument(midi_channel, instrument)
 	
 	
+func create_labels():
+	for row in range(notes):
+		var label = label_scene.instantiate()
+		
+		var p = Vector3(s * -1 * spacer, s * row * spacer, 0)
+		label.position = p		
+		add_child(label)
 
 
 enum Scale {
 	MAJOR,
 	MINOR,
+	
 	HARMONIC_MINOR,
 	MELODIC_MINOR,
 	DORIAN,
@@ -195,20 +205,6 @@ func get_scale_notes(start_midi: int, scale_type: Scale, num_notes: int = 16) ->
 
 var midi_notes = []
 
-# Example usage for your sequencer:
-func setup_note_grid():
-	# Start at C3 (MIDI 48) with a minor pentatonic scale	
-	midi_notes = get_scale_notes(root_note, Scale.PENTATONIC_MINOR)
-	
-	# Or for Irish trad feel, start at D4 with Irish hexatonic
-	# var midi_notes = get_scale_notes(62, Scale.IRISH)  # D4
-	
-	# Now midi_notes[row] gives you the MIDI note for that row
-	for row in range(notes):
-		var midi_note = midi_notes[row]
-		print("Row %d = MIDI note %d" % [row, midi_note])
-
-
 @onready var mm:MultiMeshInstance3D = $MultiMeshInstance3D
 
 func test_sequence():
@@ -279,34 +275,42 @@ func print_sequence():
 			s += "1" if sequence[row][col] else "0" 
 		print(s)
 		
+var hit_note:int = -1
+		
 func play_sample(e, row, col):
 	
 	# Potential race condition!!!!
 	# Great example
-	change_instrument(midi_channel, instrument)
-	
-	var hit_note = midi_notes[row]
-	# print("play sample:" + str(i))
-	var m = InputEventMIDI.new()
-	m.message = MIDI_MESSAGE_NOTE_ON
-	m.pitch = hit_note
-	m.velocity = 100
-	m.channel = midi_channel			
-	midi_player.receive_raw_midi_message(m)	
+	var note = midi_notes[row]	
+	note_on(note)
 				
 	
 	
 	
 func hand_entered(area, row, col):
-	print("Strike " + str(row) + " " + str(col))
+	print("Hand Entered " + str(row) + " " + str(col))
 	var hand = area.get_parent().get_parent().get_parent().get_parent().get_parent()
 	if hand.gesture == "Index Pinch":
 		sequence[row][col] = Step.ON if sequence[row][col] == Step.OFF else Step.OFF 
 		mm.multimesh.set_instance_color((col * notes) + row, in_color)	
 	else:
 		mm.multimesh.set_instance_color((col * notes) + row, hit_color)	
-	play_sample(0, row, col)
 	
+	hit_note = midi_notes[row]
+	
+	note_on(hit_note)
+
+func note_on(note):
+	change_instrument(midi_channel, instrument)
+	# print("play sample:" + str(i))
+	var m = InputEventMIDI.new()
+	m.message = MIDI_MESSAGE_NOTE_ON
+	m.pitch = note
+	m.velocity = 100
+	m.channel = midi_channel			
+	midi_player.receive_raw_midi_message(m)	
+	
+
 func note_off(note):
 	
 	var m = InputEventMIDI.new()
@@ -319,13 +323,16 @@ func note_off(note):
 	
 
 func hand_exited(area, row, col):
+	
 	var hand = area.get_parent().get_parent().get_parent().get_parent().get_parent()	
 	if sequence[row][col] != Step.ON:
 		mm.multimesh.set_instance_color((col * notes) + row, out_color)	
 	else:
 		mm.multimesh.set_instance_color((col * notes) + row, in_color)	
+	
 	note_off(midi_notes[row])
-
+	hit_note = -1 
+	
 var s = 0.08
 var spacer = 1.1
 
@@ -360,12 +367,15 @@ func make_sequencer():
 
 func play_sample_gate(e, row, col, duration):
 	var note = midi_notes[row]
+	if hit_note == note:
+		return
+	
 	print("Note off: " + str(note) + " Channel: " + str(midi_channel))	
 	play_sample(e, row, col)	
 	await get_tree().create_timer(duration).timeout
 	print("Note off: " + str(note) + " Channel: " + str(midi_channel))
-	
 	note_off(note)
+
 
 func change_color_back(row, col):
 	await get_tree().create_timer(0.2).timeout
@@ -383,6 +393,7 @@ func play_step(col):
 		return
 	for row in range(notes):
 		if sequence[row][col]:
+			print("On color")
 			mm.multimesh.set_instance_color((col * notes) + row, hit_color)	
 			play_sample_gate(0, row, col, 0.3)		
 			change_color_back(row, col)

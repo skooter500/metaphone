@@ -37,6 +37,7 @@ out_color = Color(0.029999971, 1, 0.11083323, 0.3882353)
 in_color = Color(0.33901316, 0.6156455, 0.6028598, 0.52156866)
 instrument = 9
 midi_channel = 2
+label_scene = ExtResource("4_1yhx7")
 
 [node name="controls" type="Marker3D" parent="."]
 transform = Transform3D(1.0000001, 0, -2.9802322e-08, 0, 1, 0, 2.9802322e-08, 0, 1.0000001, 0.14864141, -0.26539487, 0.072165936)
