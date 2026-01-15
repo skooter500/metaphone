@@ -108,11 +108,17 @@ value = 0.2
 [node name="title" parent="controls/gate" index="1"]
 text = "Gate"
 
-[node name="analog2" parent="controls" instance=ExtResource("5_1yhx7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8418325, 0.7538852, -0.039678335)
+[node name="vel" parent="controls" instance=ExtResource("5_1yhx7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.8676163, 0.7538852, -0.039678335)
 
-[node name="analog3" parent="controls" instance=ExtResource("5_1yhx7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.94491756, 0.7538852, -0.039678335)
+[node name="grab" parent="controls/vel" index="0"]
+value = 100.0
+max = 100.0
+
+[node name="title" parent="controls/vel" index="1"]
+text = "VELOcity"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="controls/vel"]
 
 [node name="Timer" type="Timer" parent="."]
 wait_time = 0.2
@@ -138,3 +144,4 @@ multimesh = SubResource("MultiMesh_twh6a")
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
 
 [editable path="controls/gate"]
+[editable path="controls/vel"]

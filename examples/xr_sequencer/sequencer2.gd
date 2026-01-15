@@ -149,7 +149,7 @@ enum Scale {
 	JAPANESE,  # Hirajoshi
 	EGYPTIAN,
 	HUNGARIAN_MINOR,
-	IRISH,  # Hexatonic - common in trad
+	IRISH,  # Hexatonic ` common in trad
 }
 
 var mucical_scale:Scale = Scale.MAJOR
@@ -319,7 +319,7 @@ func note_on(note):
 	var m = InputEventMIDI.new()
 	m.message = MIDI_MESSAGE_NOTE_ON
 	m.pitch = note
-	m.velocity = 100
+	m.velocity = $controls/vel/grab.value
 	m.channel = midi_channel			
 	midi_player.receive_raw_midi_message(m)	
 	

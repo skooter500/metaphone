@@ -5,7 +5,7 @@ var d:float = 0
 var start_y:float
 var end_y:float
 @export var value:float = 0
-var height = 1
+var height = 0.5
 @export var min:float = 0
 @export var max:float = 1
 
