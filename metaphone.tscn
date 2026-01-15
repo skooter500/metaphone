@@ -66,7 +66,7 @@ ambient_light_color = Color(1, 1, 1, 1)
 script = ExtResource("1_byv7j")
 
 [node name="instruments" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.8232094)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0900598, 0, -0.8232094)
 script = ExtResource("12_ucien")
 
 [node name="Timer" type="Timer" parent="instruments"]
@@ -134,7 +134,7 @@ text = "STOP/START"
 horizontal_alignment = 2
 
 [node name="vol" parent="instruments" instance=ExtResource("7_8d825")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0071368, 1.3463478, 0.4796364)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0990498, 1.3463478, 0.4796364)
 script = ExtResource("9_ymxam")
 
 [node name="grab" parent="instruments/vol" index="0"]
@@ -152,11 +152,11 @@ script = ExtResource("8_ymxam")
 text = "REVERB"
 
 [node name="delay_mix" parent="instruments" instance=ExtResource("7_8d825")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -0.86476976, 1.3463478, 0.4796364)
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -0.9685682, 1.3463478, 0.4796364)
 script = ExtResource("10_uo375")
 
 [node name="title" parent="instruments/delay_mix" index="1"]
-text = "REVERB"
+text = "Delay"
 
 [node name="XROrigin3D" type="XROrigin3D" parent="."]
 
