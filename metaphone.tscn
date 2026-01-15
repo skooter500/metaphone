@@ -246,8 +246,10 @@ light_energy = 16.0
 [connection signal="pose_started" from="XROrigin3D/right/HandPoseDetector" to="XROrigin3D/right" method="_on_hand_pose_detector_pose_started"]
 
 [editable path="instruments/sequencer"]
+[editable path="instruments/sequencer/controls/gate"]
 [editable path="instruments/sequencer2"]
 [editable path="instruments/sequencer2/controls/clear"]
+[editable path="instruments/sequencer2/controls/gate"]
 [editable path="instruments/mode"]
 [editable path="instruments/mode3"]
 [editable path="instruments/mode2"]

@@ -10,7 +10,7 @@ size = Vector3(0.06, 0.06, 0.06)
 transparency = 1
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_g1h6b"]
-size = Vector3(0.05870056, 0.15716553, 0.05883789)
+size = Vector3(0.05870056, 0.6190758, 0.05883789)
 
 [node name="analog" type="Marker3D"]
 
@@ -27,7 +27,7 @@ skeleton = NodePath("../../..")
 surface_material_override/0 = SubResource("StandardMaterial3D_1yhx7")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="grab"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0002822876, 0.004547119, -0.0003662035)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0002822876, -0.0009059906, -0.0003662035)
 shape = SubResource("BoxShape3D_g1h6b")
 
 [node name="title" parent="." instance=ExtResource("2_aigei")]

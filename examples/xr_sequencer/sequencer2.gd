@@ -401,6 +401,7 @@ func change_color_back(row, col):
 	else:
 		mm.multimesh.set_instance_color((col * notes) + row, out_color)	
 	
+ 
 
 func play_step(col):
 	var p = Vector3(s * col * spacer, s * -1 * spacer, 0)
@@ -414,7 +415,8 @@ func play_step(col):
 		if sequence[row][col]:
 			print("On color")
 			mm.multimesh.set_instance_color((col * notes) + row, hit_color)	
-			play_sample_gate(0, row, col, 0.3)		
+			var gate = $controls/gate/grab.value
+			play_sample_gate(0, row, col, gate)		
 			change_color_back(row, col)
 					
 
