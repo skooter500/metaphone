@@ -13,7 +13,7 @@ transparency = 1
 size = Vector3(0.05870056, 0.6190758, 0.05883789)
 
 [sub_resource type="BoxMesh" id="BoxMesh_wukub"]
-size = Vector3(0.02, 1, 0.01)
+size = Vector3(0.01, 1, 0.01)
 
 [node name="analog" type="Marker3D"]
 
