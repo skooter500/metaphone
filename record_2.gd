@@ -10,4 +10,4 @@ var format := AudioStreamWAV.FORMAT_16_BITS  # This is the default format on rec
 func _ready() -> void:
 	var idx := AudioServer.get_bus_index(&"Record")
 	effect = AudioServer.get_bus_effect(idx, 0)
-	effect.set_recording_active(true)
+	# ffect.set_recording_active(false)
