@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://c8tx40me7j55t"]
+[gd_scene load_steps=35 format=3 uid="uid://c8tx40me7j55t"]
 
 [ext_resource type="PackedScene" uid="uid://cuyd1qv0pn26e" path="res://addons/midi/MidiPlayer.tscn" id="1_83we6"]
 [ext_resource type="Script" uid="uid://nxajcnxqcaey" path="res://timer.gd" id="1_byv7j"]
@@ -10,6 +10,7 @@
 [ext_resource type="Script" uid="uid://e0tg3ajyvad4" path="res://hand.gd" id="9_00tvn"]
 [ext_resource type="Script" uid="uid://do1q716vi5th3" path="res://vol.gd" id="9_ymxam"]
 [ext_resource type="Script" uid="uid://c3j46j5t5te57" path="res://delay_mix.gd" id="10_uo375"]
+[ext_resource type="PackedScene" uid="uid://c0ngvuulgbetg" path="res://high_pass_filter.tscn" id="11_2c0tl"]
 [ext_resource type="Script" uid="uid://n7iy2lr1dvkr" path="res://instruments.gd" id="12_ucien"]
 [ext_resource type="PackedScene" uid="uid://2i1nqhynnlm0" path="res://button.tscn" id="16_8d825"]
 [ext_resource type="PackedScene" uid="uid://b7dvkr5ss01as" path="res://sequencer.tscn" id="17_s2ckv"]
@@ -96,7 +97,7 @@ visible = false
 mesh = SubResource("BoxMesh_s2ckv")
 
 [node name="sequencer" parent="instruments" instance=ExtResource("17_s2ckv")]
-transform = Transform3D(-4.3711385e-08, 0, 0.9999999, 0, 1, 0, -0.9999999, 0, -4.3711385e-08, -1.4260659, 0.8463087, 2.07698e-08)
+transform = Transform3D(-4.3711385e-08, 0, 0.9999999, 0, 1, 0, -0.9999999, 0, -4.3711385e-08, -1.7306789, 0.8463087, 3.408486e-08)
 instrument = 17
 midi_channel = 1
 root_note = 60
@@ -171,6 +172,12 @@ skeleton = NodePath("../../../..")
 
 [node name="title" parent="instruments/controls/mic_vol" index="1"]
 text = "MIC"
+
+[node name="high_pass_filter" parent="instruments/controls" instance=ExtResource("11_2c0tl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25052178, 0.0024667978, 0)
+
+[node name="high_cut" parent="instruments/controls/high_pass_filter" index="0"]
+effect_index = 2
 
 [node name="XROrigin3D" type="XROrigin3D" parent="."]
 
@@ -296,5 +303,8 @@ light_energy = 16.0
 [editable path="instruments/controls/reverb_mix2"]
 [editable path="instruments/controls/delay_mix"]
 [editable path="instruments/controls/mic_vol"]
+[editable path="instruments/controls/high_pass_filter"]
+[editable path="instruments/controls/high_pass_filter/high_cut"]
+[editable path="instruments/controls/high_pass_filter/high_res"]
 [editable path="XROrigin3D/left/LeftHandHumanoid2"]
 [editable path="XROrigin3D/right/RightHandHumanoid2"]
